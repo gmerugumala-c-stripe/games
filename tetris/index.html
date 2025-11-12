@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris - Beautiful Animated Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1>Tetris</h1>
+            <div class="score-display">
+                <div class="score-item">
+                    <span class="label">Score</span>
+                    <span class="value" id="score">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">Lines</span>
+                    <span class="value" id="lines">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">Level</span>
+                    <span class="value" id="level">1</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="controls">
+                <h3>Controls</h3>
+                <div class="controls-grid">
+                    <div class="control-item">
+                        <span class="key">← →</span>
+                        <span class="action">Move</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">↓</span>
+                        <span class="action">Soft Drop</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">↑</span>
+                        <span class="action">Rotate</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">Space</span>
+                        <span class="action">Hard Drop</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">C</span>
+                        <span class="action">Hold</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">P</span>
+                        <span class="action">Pause</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="tetris-canvas" width="300" height="600"></canvas>
+
+                <div class="side-panel">
+                    <div class="hold-piece">
+                        <h3>Hold</h3>
+                        <canvas id="hold-canvas" width="120" height="120"></canvas>
+                    </div>
+
+                    <div class="next-piece">
+                        <h3>Next</h3>
+                        <canvas id="next-canvas" width="120" height="120"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-footer">
+            <button id="start-btn" class="btn-primary">Start Game</button>
+            <button id="pause-btn" class="btn-secondary" disabled>Pause</button>
+            <button id="restart-btn" class="btn-secondary" disabled>Restart</button>
+        </div>
+    </div>
+
+    <script src="tetris.js"></script>
+</body>
+</html>

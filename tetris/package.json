@@ -1,0 +1,16 @@
+{
+  "name": "tetris-game",
+  "version": "1.0.0",
+  "description": "A beautiful animated Tetris game",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server -p 3000 -o",
+    "start": "npx http-server -p 3000"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "keywords": ["tetris", "game", "html5", "canvas"],
+  "author": "",
+  "license": "MIT"
+}
