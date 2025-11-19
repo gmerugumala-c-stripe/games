@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><span class="title-piece">♔</span> <span class="title-text">Chess Game</span> <span class="title-piece">♚</span></h1>
+        </header>
+        
+        <div class="game-wrapper">
+            <div class="sidebar left-sidebar">
+                <div class="info-panel">
+                    <h2>Game Info</h2>
+                    <div class="turn-indicator">
+                        <div class="current-turn">
+                            <span class="turn-label">Current Turn:</span>
+                            <span class="turn-color" id="currentTurn">White</span>
+                        </div>
+                    </div>
+                    <div class="captured-pieces">
+                        <h3>Captured Pieces</h3>
+                        <div class="captured-white">
+                            <span class="label">Black captured:</span>
+                            <div id="capturedWhite" class="pieces-list"></div>
+                        </div>
+                        <div class="captured-black">
+                            <span class="label">White captured:</span>
+                            <div id="capturedBlack" class="pieces-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-container">
+                <div class="board-wrapper">
+                    <div class="board-container">
+                        <div class="board-with-coords">
+                            <div class="rank-labels">
+                                <div class="rank-label">8</div>
+                                <div class="rank-label">7</div>
+                                <div class="rank-label">6</div>
+                                <div class="rank-label">5</div>
+                                <div class="rank-label">4</div>
+                                <div class="rank-label">3</div>
+                                <div class="rank-label">2</div>
+                                <div class="rank-label">1</div>
+                            </div>
+                            <div class="board-and-files">
+                                <div id="chessboard" class="chessboard"></div>
+                                <div class="file-labels">
+                                    <div class="file-label">a</div>
+                                    <div class="file-label">b</div>
+                                    <div class="file-label">c</div>
+                                    <div class="file-label">d</div>
+                                    <div class="file-label">e</div>
+                                    <div class="file-label">f</div>
+                                    <div class="file-label">g</div>
+                                    <div class="file-label">h</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button id="newGameBtn" class="btn btn-primary">New Game</button>
+                    <button id="undoBtn" class="btn btn-secondary">Undo Move</button>
+                    <button id="toggleSoundBtn" class="btn btn-secondary">🔊 Sound: ON</button>
+                    <button id="toggleCoordsBtn" class="btn btn-secondary">📍 Coordinates: ON</button>
+                </div>
+                
+                <div id="gameStatus" class="game-status"></div>
+            </div>
+            
+            <div class="sidebar right-sidebar">
+                <div class="moves-panel">
+                    <h2>Move History</h2>
+                    <div id="moveHistory" class="move-history"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="promotionModal" class="modal">
+        <div class="modal-content">
+            <h2>Choose Promotion Piece</h2>
+            <div class="promotion-pieces" id="promotionPieces"></div>
+        </div>
+    </div>
+    
+    <div id="gameOverModal" class="modal">
+        <div class="modal-content">
+            <h2 id="gameOverTitle"></h2>
+            <p id="gameOverMessage"></p>
+            <button id="newGameFromModal" class="btn btn-primary">Start New Game</button>
+        </div>
+    </div>
+    
+    <script src="chess.js"></script>
+</body>
+</html>
+
