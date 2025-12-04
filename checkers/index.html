@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkers Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>
+                <span class="crown-left">♛</span>
+                <span class="title-text">Checkers</span>
+                <span class="crown-right">♛</span>
+            </h1>
+            <p class="subtitle">Classic Board Game</p>
+        </header>
+        
+        <div class="game-wrapper">
+            <div class="sidebar left-sidebar">
+                <div class="player-panel red-panel">
+                    <div class="player-header">
+                        <div class="piece-icon red-piece"></div>
+                        <h2>Red Player</h2>
+                    </div>
+                    <div class="player-stats">
+                        <div class="stat">
+                            <span class="stat-label">Pieces</span>
+                            <span class="stat-value" id="redPieces">12</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Kings</span>
+                            <span class="stat-value" id="redKings">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Captured</span>
+                            <span class="stat-value" id="redCaptured">0</span>
+                        </div>
+                    </div>
+                    <div class="turn-indicator" id="redTurn">
+                        <span class="turn-arrow">▶</span> Your Turn
+                    </div>
+                </div>
+                
+                <div class="player-panel black-panel">
+                    <div class="player-header">
+                        <div class="piece-icon black-piece"></div>
+                        <h2>Black <span class="ai-badge">🤖</span></h2>
+                    </div>
+                    <div class="player-stats">
+                        <div class="stat">
+                            <span class="stat-label">Pieces</span>
+                            <span class="stat-value" id="blackPieces">12</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Kings</span>
+                            <span class="stat-value" id="blackKings">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Captured</span>
+                            <span class="stat-value" id="blackCaptured">0</span>
+                        </div>
+                    </div>
+                    <div class="turn-indicator" id="blackTurn">
+                        <span class="turn-arrow">▶</span> Your Turn
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-container">
+                <div class="board-wrapper">
+                    <div class="board-frame">
+                        <div class="corner-decoration top-left"></div>
+                        <div class="corner-decoration top-right"></div>
+                        <div class="corner-decoration bottom-left"></div>
+                        <div class="corner-decoration bottom-right"></div>
+                        <div id="checkerboard" class="checkerboard"></div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button id="newGameBtn" class="btn btn-primary">
+                        <span class="btn-icon">↻</span> New Game
+                    </button>
+                    <button id="toggleAIBtn" class="btn btn-ai ai-on">
+                        <span class="btn-icon">🤖</span> vs Computer
+                    </button>
+                    <div class="difficulty-selector" id="difficultySelector">
+                        <label for="difficultySelect">
+                            <span class="btn-icon">⚡</span> Difficulty:
+                        </label>
+                        <select id="difficultySelect">
+                            <option value="easy">Easy</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                    </div>
+                    <button id="undoBtn" class="btn btn-secondary">
+                        <span class="btn-icon">↩</span> Undo
+                    </button>
+                    <button id="toggleSoundBtn" class="btn btn-secondary">
+                        <span class="btn-icon">🔊</span> Sound
+                    </button>
+                </div>
+                
+                <div id="gameStatus" class="game-status"></div>
+            </div>
+            
+            <div class="sidebar right-sidebar">
+                <div class="moves-panel">
+                    <h2>Move History</h2>
+                    <div id="moveHistory" class="move-history"></div>
+                </div>
+                
+                <div class="rules-panel">
+                    <h2>Quick Rules</h2>
+                    <ul class="rules-list">
+                        <li>Pieces move diagonally forward</li>
+                        <li>Jump to capture opponent pieces</li>
+                        <li>Multiple jumps allowed</li>
+                        <li>Kings can move backwards</li>
+                        <li>Capture all pieces to win!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="gameOverModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-crown">👑</div>
+            <h2 id="gameOverTitle"></h2>
+            <p id="gameOverMessage"></p>
+            <button id="newGameFromModal" class="btn btn-primary">
+                <span class="btn-icon">↻</span> Play Again
+            </button>
+        </div>
+    </div>
+    
+    <div id="kingModal" class="modal king-modal">
+        <div class="modal-content">
+            <div class="king-animation">👑</div>
+            <h2 id="kingModalTitle">Crowned!</h2>
+            <p id="kingModalMessage">Your piece has become a King!</p>
+        </div>
+    </div>
+    
+    <script src="checkers.js"></script>
+</body>
+</html>
+
