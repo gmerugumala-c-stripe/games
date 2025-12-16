@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GO Game - Baduk/Weiqi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>GO Game</h1>
+            <p class="subtitle">Ancient Strategy Board Game</p>
+        </header>
+
+        <div class="game-wrapper">
+            <div class="info-panel">
+                <div class="game-info">
+                    <div class="turn-indicator">
+                        <h2>Current Turn</h2>
+                        <div class="current-player">
+                            <div class="stone black-stone"></div>
+                            <span id="current-turn">Black</span>
+                        </div>
+                    </div>
+
+                    <div class="captures">
+                        <h3>Captures</h3>
+                        <div class="capture-info">
+                            <div class="player-capture">
+                                <div class="stone black-stone small"></div>
+                                <span id="black-captures">0</span>
+                            </div>
+                            <div class="player-capture">
+                                <div class="stone white-stone small"></div>
+                                <span id="white-captures">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scores" id="scores" style="display: none;">
+                        <h3>Final Score</h3>
+                        <div class="score-details">
+                            <p>Black: <span id="black-score">0</span></p>
+                            <p>White: <span id="white-score">0</span></p>
+                            <p class="winner" id="winner"></p>
+                        </div>
+                    </div>
+
+                    <div class="difficulty-section">
+                        <h3>Difficulty Level</h3>
+                        <div class="difficulty-buttons">
+                            <button class="btn-difficulty" data-size="9">Easy<span class="board-size">9×9</span></button>
+                            <button class="btn-difficulty" data-size="13">Medium<span class="board-size">13×13</span></button>
+                            <button class="btn-difficulty active" data-size="19">Hard<span class="board-size">19×19</span></button>
+                        </div>
+                    </div>
+
+                    <div class="controls">
+                        <button id="pass-btn" class="btn btn-primary">Pass</button>
+                        <button id="undo-btn" class="btn btn-warning">Undo Move</button>
+                        <button id="reset-btn" class="btn btn-secondary">New Game</button>
+                    </div>
+
+                    <div class="beginner-mode">
+                        <label class="toggle-container">
+                            <input type="checkbox" id="beginner-hints" checked>
+                            <span class="toggle-label">Show Beginner Hints</span>
+                        </label>
+                    </div>
+
+                    <div class="game-status">
+                        <p id="status-message"></p>
+                    </div>
+
+                    <div class="move-history-section">
+                        <h3>Move History</h3>
+                        <div id="move-history" class="move-history-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="board-container">
+                <canvas id="board-canvas"></canvas>
+            </div>
+
+            <div class="info-panel how-to-play-panel">
+                <h3>How to Play</h3>
+
+                <div class="beginner-tip" id="current-tip">
+                    <h4>💡 Beginner Tip</h4>
+                    <p id="tip-text">Hover over stones to see their liberties. Groups with only 1 liberty are in danger!</p>
+                </div>
+                
+                <div class="rule-item">
+                    <h4>🎯 Objective</h4>
+                    <p>Control more territory than your opponent by placing stones and capturing enemy groups.</p>
+                </div>
+
+                <div class="rule-item">
+                    <h4>📍 Placement</h4>
+                    <p>Players alternate placing stones on the <strong>intersections</strong> of the grid lines. Black always moves first.</p>
+                </div>
+
+                <div class="rule-item">
+                    <h4>🔗 Liberties</h4>
+                    <p>A <strong>liberty</strong> is an empty point directly adjacent (not diagonal) to a stone. Groups need at least one liberty to survive.</p>
+                </div>
+
+                <div class="rule-item">
+                    <h4>⚔️ Capturing</h4>
+                    <p>Surround opponent's stones to capture them. When a group has no liberties left, it's removed from the board.</p>
+                </div>
+
+                <div class="rule-item">
+                    <h4>🚫 Suicide Rule</h4>
+                    <p>You cannot place a stone where it would have no liberties, unless that move captures opponent stones.</p>
+                </div>
+
+                <div class="rule-item">
+                    <h4>♻️ Ko Rule</h4>
+                    <p>You cannot immediately recapture a single stone if doing so would recreate the previous board position.</p>
+                </div>
+
+                <div class="rule-item">
+                    <h4>⏭️ Passing</h4>
+                    <p>Click "Pass" if you don't want to make a move. When both players pass consecutively, the game ends.</p>
+                </div>
+
+                <div class="rule-item">
+                    <h4>🏆 Scoring</h4>
+                    <p><strong>Territory:</strong> Empty intersections surrounded by your stones<br>
+                    <strong>Captures:</strong> Opponent stones you've removed<br>
+                    <strong>Komi:</strong> White gets 6.5 bonus points</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="go.js"></script>
+</body>
+</html>
+

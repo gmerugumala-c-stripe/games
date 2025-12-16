@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Target Blitz - Shooting Gallery</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="scan-lines"></div>
+    <div class="game-container">
+        <header class="game-header">
+            <h1>TARGET BLITZ</h1>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-icon">🎯</span>
+                    <div class="stat-content">
+                        <span class="stat-label">Score</span>
+                        <span class="stat-value" id="score">0</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">⏱️</span>
+                    <div class="stat-content">
+                        <span class="stat-label">Time</span>
+                        <span class="stat-value" id="timer">60</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">🔫</span>
+                    <div class="stat-content">
+                        <span class="stat-label">Ammo</span>
+                        <span class="stat-value" id="ammo">30</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">🏆</span>
+                    <div class="stat-content">
+                        <span class="stat-label">Combo</span>
+                        <span class="stat-value" id="combo">x1</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="game-main">
+            <aside class="weapon-panel">
+                <h3>Arsenal</h3>
+                <div class="weapons">
+                    <button class="weapon-btn active" data-weapon="pistol">
+                        <div class="weapon-icon">🔫</div>
+                        <div class="weapon-info">
+                            <span class="weapon-name">Pistol</span>
+                            <span class="weapon-stats">DMG: 1 | SPD: Fast</span>
+                        </div>
+                    </button>
+                    <button class="weapon-btn" data-weapon="shotgun">
+                        <div class="weapon-icon">💥</div>
+                        <div class="weapon-info">
+                            <span class="weapon-name">Shotgun</span>
+                            <span class="weapon-stats">DMG: 3 | SPD: Slow</span>
+                        </div>
+                    </button>
+                    <button class="weapon-btn" data-weapon="rifle">
+                        <div class="weapon-icon">🎯</div>
+                        <div class="weapon-info">
+                            <span class="weapon-name">Rifle</span>
+                            <span class="weapon-stats">DMG: 2 | SPD: Med</span>
+                        </div>
+                    </button>
+                    <button class="weapon-btn" data-weapon="smg">
+                        <div class="weapon-icon">⚡</div>
+                        <div class="weapon-info">
+                            <span class="weapon-name">SMG</span>
+                            <span class="weapon-stats">DMG: 1 | SPD: Rapid</span>
+                        </div>
+                    </button>
+                </div>
+                <div class="reload-section">
+                    <button id="reload-btn" class="reload-btn">
+                        <span>RELOAD [R]</span>
+                    </button>
+                </div>
+            </aside>
+
+            <div class="game-arena">
+                <canvas id="game-canvas"></canvas>
+                <div class="crosshair" id="crosshair">
+                    <div class="crosshair-line top"></div>
+                    <div class="crosshair-line bottom"></div>
+                    <div class="crosshair-line left"></div>
+                    <div class="crosshair-line right"></div>
+                    <div class="crosshair-dot"></div>
+                </div>
+                <div class="muzzle-flash" id="muzzle-flash"></div>
+            </div>
+
+            <aside class="info-panel">
+                <h3>Targets</h3>
+                <div class="target-legend">
+                    <div class="legend-item">
+                        <div class="legend-target standard"></div>
+                        <span>Standard (+10)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-target fast"></div>
+                        <span>Fast (+25)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-target bonus"></div>
+                        <span>Bonus (+50)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-target danger"></div>
+                        <span>Danger (-30)</span>
+                    </div>
+                </div>
+                <h3>Controls</h3>
+                <div class="controls-list">
+                    <div class="control-item">
+                        <kbd>1-4</kbd>
+                        <span>Switch Weapon</span>
+                    </div>
+                    <div class="control-item">
+                        <kbd>R</kbd>
+                        <span>Reload</span>
+                    </div>
+                    <div class="control-item">
+                        <kbd>Click</kbd>
+                        <span>Shoot</span>
+                    </div>
+                    <div class="control-item">
+                        <kbd>Space</kbd>
+                        <span>Start/Pause</span>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <footer class="game-footer">
+            <button id="start-btn" class="action-btn primary">START MISSION</button>
+            <button id="pause-btn" class="action-btn secondary" disabled>PAUSE</button>
+        </footer>
+
+        <div class="game-overlay" id="game-overlay">
+            <div class="overlay-content">
+                <h2 id="overlay-title">READY?</h2>
+                <p id="overlay-message">Click START MISSION to begin</p>
+                <div class="final-stats" id="final-stats" style="display: none;">
+                    <div class="final-stat">
+                        <span class="final-label">Final Score</span>
+                        <span class="final-value" id="final-score">0</span>
+                    </div>
+                    <div class="final-stat">
+                        <span class="final-label">Accuracy</span>
+                        <span class="final-value" id="final-accuracy">0%</span>
+                    </div>
+                    <div class="final-stat">
+                        <span class="final-label">Best Combo</span>
+                        <span class="final-value" id="final-combo">x1</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="shooter.js"></script>
+</body>
+</html>
+
