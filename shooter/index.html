@@ -3,15 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Target Blitz - Shooting Gallery</title>
+    <title>Target Blitz ULTRA - Shooting Gallery</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="scan-lines"></div>
+    <div class="particles-bg" id="particles-bg"></div>
+    
     <div class="game-container">
         <header class="game-header">
-            <h1>TARGET BLITZ</h1>
+            <div class="title-section">
+                <h1>TARGET BLITZ <span class="ultra-badge">ULTRA</span></h1>
+                <div class="high-score-display">
+                    <span class="hs-label">HIGH SCORE:</span>
+                    <span class="hs-value" id="high-score">0</span>
+                </div>
+            </div>
+            
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="classic">
+                    <span class="mode-icon">🎯</span>
+                    <span class="mode-name">Classic</span>
+                    <span class="mode-desc">60 seconds</span>
+                </button>
+                <button class="mode-btn" data-mode="endless">
+                    <span class="mode-icon">♾️</span>
+                    <span class="mode-name">Endless</span>
+                    <span class="mode-desc">No time limit</span>
+                </button>
+                <button class="mode-btn" data-mode="survival">
+                    <span class="mode-icon">💀</span>
+                    <span class="mode-name">Survival</span>
+                    <span class="mode-desc">3 lives</span>
+                </button>
+            </div>
+            
             <div class="stats-bar">
                 <div class="stat-item">
                     <span class="stat-icon">🎯</span>
@@ -35,13 +62,29 @@
                     </div>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-icon">🏆</span>
+                    <span class="stat-icon">🔥</span>
                     <div class="stat-content">
                         <span class="stat-label">Combo</span>
-                        <span class="stat-value" id="combo">x1</span>
+                        <span class="stat-value combo-value" id="combo">x1</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">🌊</span>
+                    <div class="stat-content">
+                        <span class="stat-label">Wave</span>
+                        <span class="stat-value" id="wave">1</span>
+                    </div>
+                </div>
+                <div class="stat-item lives-display">
+                    <span class="stat-icon">❤️</span>
+                    <div class="stat-content">
+                        <span class="stat-label">Lives</span>
+                        <span class="stat-value" id="lives">❤️❤️❤️</span>
                     </div>
                 </div>
             </div>
+            
+            <div class="powerup-bar" id="powerup-bar"></div>
         </header>
 
         <main class="game-main">
@@ -54,27 +97,31 @@
                             <span class="weapon-name">Pistol</span>
                             <span class="weapon-stats">DMG: 1 | SPD: Fast</span>
                         </div>
+                        <span class="weapon-key">1</span>
                     </button>
                     <button class="weapon-btn" data-weapon="shotgun">
                         <div class="weapon-icon">💥</div>
                         <div class="weapon-info">
                             <span class="weapon-name">Shotgun</span>
-                            <span class="weapon-stats">DMG: 3 | SPD: Slow</span>
+                            <span class="weapon-stats">DMG: 2 | 8 pellets</span>
                         </div>
+                        <span class="weapon-key">2</span>
                     </button>
                     <button class="weapon-btn" data-weapon="rifle">
                         <div class="weapon-icon">🎯</div>
                         <div class="weapon-info">
                             <span class="weapon-name">Rifle</span>
-                            <span class="weapon-stats">DMG: 2 | SPD: Med</span>
+                            <span class="weapon-stats">DMG: 3 | Precise</span>
                         </div>
+                        <span class="weapon-key">3</span>
                     </button>
                     <button class="weapon-btn" data-weapon="smg">
                         <div class="weapon-icon">⚡</div>
                         <div class="weapon-info">
                             <span class="weapon-name">SMG</span>
-                            <span class="weapon-stats">DMG: 1 | SPD: Rapid</span>
+                            <span class="weapon-stats">DMG: 1 | Rapid</span>
                         </div>
+                        <span class="weapon-key">4</span>
                     </button>
                 </div>
                 <div class="reload-section">
@@ -94,6 +141,7 @@
                     <div class="crosshair-dot"></div>
                 </div>
                 <div class="muzzle-flash" id="muzzle-flash"></div>
+                <div class="achievement-popup" id="achievement-popup"></div>
             </div>
 
             <aside class="info-panel">
@@ -101,52 +149,86 @@
                 <div class="target-legend">
                     <div class="legend-item">
                         <div class="legend-target standard"></div>
-                        <span>Standard (+10)</span>
+                        <span>Standard +10</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-target fast"></div>
-                        <span>Fast (+25)</span>
+                        <span>Fast +25</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-target bonus"></div>
-                        <span>Bonus (+50)</span>
+                        <span>Bonus +50</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-target danger"></div>
-                        <span>Danger (-30)</span>
+                        <span>Danger -30</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-target explosive"></div>
+                        <span>Explosive 💣</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-target ghost"></div>
+                        <span>Ghost 👻</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-target split"></div>
+                        <span>Split ÷</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-target armored"></div>
+                        <span>Armored 🛡️</span>
                     </div>
                 </div>
-                <h3>Controls</h3>
-                <div class="controls-list">
-                    <div class="control-item">
-                        <kbd>1-4</kbd>
-                        <span>Switch Weapon</span>
+                
+                <h3>Power-ups</h3>
+                <div class="powerup-legend">
+                    <div class="legend-item">
+                        <span class="pu-icon">⚡</span>
+                        <span>Multi-shot</span>
                     </div>
-                    <div class="control-item">
-                        <kbd>R</kbd>
-                        <span>Reload</span>
+                    <div class="legend-item">
+                        <span class="pu-icon">⏱️</span>
+                        <span>Slow-mo</span>
                     </div>
-                    <div class="control-item">
-                        <kbd>Click</kbd>
-                        <span>Shoot</span>
+                    <div class="legend-item">
+                        <span class="pu-icon">🔥</span>
+                        <span>Rapid Fire</span>
                     </div>
-                    <div class="control-item">
-                        <kbd>Space</kbd>
-                        <span>Start/Pause</span>
+                    <div class="legend-item">
+                        <span class="pu-icon">💎</span>
+                        <span>2X Points</span>
                     </div>
+                    <div class="legend-item">
+                        <span class="pu-icon">💥</span>
+                        <span>Nuke</span>
+                    </div>
+                </div>
+                
+                <h3>Tips</h3>
+                <div class="tips-list">
+                    <div class="tip-item">🎯 Hit center for CRITICAL damage!</div>
+                    <div class="tip-item">🌊 Boss appears every 2 waves</div>
+                    <div class="tip-item">💥 Chain explosions for combos</div>
                 </div>
             </aside>
         </main>
 
         <footer class="game-footer">
-            <button id="start-btn" class="action-btn primary">START MISSION</button>
-            <button id="pause-btn" class="action-btn secondary" disabled>PAUSE</button>
+            <button id="start-btn" class="action-btn primary">
+                <span class="btn-icon">▶</span>
+                START MISSION
+            </button>
+            <button id="pause-btn" class="action-btn secondary" disabled>
+                <span class="btn-icon">⏸</span>
+                PAUSE
+            </button>
         </footer>
 
         <div class="game-overlay" id="game-overlay">
             <div class="overlay-content">
-                <h2 id="overlay-title">READY?</h2>
-                <p id="overlay-message">Click START MISSION to begin</p>
+                <h2 id="overlay-title">READY FOR ACTION?</h2>
+                <p id="overlay-message">Select a game mode and click START MISSION</p>
                 <div class="final-stats" id="final-stats" style="display: none;">
                     <div class="final-stat">
                         <span class="final-label">Final Score</span>
@@ -161,11 +243,24 @@
                         <span class="final-value" id="final-combo">x1</span>
                     </div>
                 </div>
+                <div class="extra-stats" id="extra-stats"></div>
             </div>
         </div>
     </div>
 
     <script src="shooter.js"></script>
+    <script>
+        // Animated background particles
+        const particlesBg = document.getElementById('particles-bg');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'bg-particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            particle.style.animationDuration = (3 + Math.random() * 4) + 's';
+            particlesBg.appendChild(particle);
+        }
+    </script>
 </body>
 </html>
-
