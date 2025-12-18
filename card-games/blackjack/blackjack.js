@@ -1,5 +1,6 @@
 class BlackjackGame {
     constructor() {
+        this.startingBalance = 1000;
         this.balance = 1000;
         this.currentBet = 10;
         this.deck = [];
@@ -12,6 +13,8 @@ class BlackjackGame {
             wins: 0,
             losses: 0
         };
+        this.gameHistory = [];
+        this.runningTotal = 0;
         
         this.suits = ['♠', '♥', '♦', '♣'];
         this.ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
@@ -147,6 +150,7 @@ class BlackjackGame {
         
         this.dealCard(this.playerHand);
         this.updateDisplay();
+        this.updateControls(); // Update controls to disable double-down after hitting
         
         const playerValue = this.calculateHandValue(this.playerHand);
         
@@ -205,8 +209,17 @@ class BlackjackGame {
     }
     
     async doubleDown() {
-        if (!this.gameInProgress || this.currentBet * 2 > this.balance) {
-            this.showMessage('Insufficient balance for double down!', 'error');
+        if (!this.gameInProgress) {
+            return;
+        }
+        
+        if (this.playerHand.length !== 2) {
+            this.showMessage('Double down is only available with exactly 2 cards!', 'lose');
+            return;
+        }
+        
+        if (this.currentBet * 2 > this.balance) {
+            this.showMessage('Insufficient balance for double down!', 'lose');
             return;
         }
         
@@ -228,25 +241,50 @@ class BlackjackGame {
         this.gameInProgress = false;
         this.stats.gamesPlayed++;
         
+        let netAmount = 0;
         if (result === 'win') {
             this.balance += this.currentBet * 2;
+            netAmount = this.currentBet; // Profit (bet returned + bet won)
             this.stats.wins++;
         } else if (result === 'push') {
             this.balance += this.currentBet;
+            netAmount = 0; // No profit, no loss
         } else {
+            netAmount = -this.currentBet; // Loss
             this.stats.losses++;
         }
+        
+        // Add to history
+        this.gameHistory.unshift({
+            gameNumber: this.stats.gamesPlayed,
+            bet: this.currentBet,
+            result: result,
+            netAmount: netAmount
+        });
+        
+        // Calculate running total from balance difference (more accurate)
+        this.runningTotal = this.balance - this.startingBalance;
         
         this.updateDisplay();
         this.updateControls();
         this.updateGameStatus(message, result);
-        this.showModal(result === 'win' ? 'You Win!' : result === 'lose' ? 'You Lose!' : 'Push!', message);
+        this.updateHistory();
+        this.showModal(result === 'win' ? 'You Win!' : result === 'lose' ? 'You Lose!' : 'Push!', message, result);
     }
     
     newGame() {
+        // Reset balance and game state
+        this.balance = this.startingBalance;
+        this.runningTotal = 0;
         this.dealerHand = [];
         this.playerHand = [];
         this.gameInProgress = false;
+        this.stats = {
+            gamesPlayed: 0,
+            wins: 0,
+            losses: 0
+        };
+        this.gameHistory = [];
         this.createDeck();
         this.shuffleDeck();
         this.updateDisplay();
@@ -279,6 +317,9 @@ class BlackjackGame {
         // Update balance
         document.getElementById('balance').textContent = `$${this.balance}`;
         
+        // Update bet display
+        this.updateBetDisplay();
+        
         // Update player cards
         const playerCardsContainer = document.getElementById('playerCards');
         playerCardsContainer.innerHTML = '';
@@ -310,6 +351,86 @@ class BlackjackGame {
             ? Math.round((this.stats.wins / this.stats.gamesPlayed) * 100) 
             : 0;
         document.getElementById('winRate').textContent = `${winRate}%`;
+        
+        // Update history display
+        this.updateHistory();
+    }
+    
+    updateBetDisplay() {
+        // Update "You Bet" display
+        const currentBetDisplay = document.getElementById('currentBetDisplay');
+        if (currentBetDisplay) {
+            currentBetDisplay.textContent = `$${this.currentBet}`;
+        }
+        
+        // Calculate and update "You Win" display
+        // Regular win: bet * 2 (you get your bet back + equal winnings)
+        // Blackjack: bet * 2.5 (you get your bet back + 1.5x winnings)
+        const potentialWinDisplay = document.getElementById('potentialWinDisplay');
+        if (potentialWinDisplay) {
+            if (this.gameInProgress && this.playerHand.length === 2 && this.isBlackjack(this.playerHand)) {
+                // If player has blackjack, show potential blackjack winnings
+                potentialWinDisplay.textContent = `$${Math.floor(this.currentBet * 2.5)}`;
+            } else {
+                // Regular win potential (bet * 2)
+                potentialWinDisplay.textContent = `$${this.currentBet * 2}`;
+            }
+        }
+    }
+    
+    updateHistory() {
+        const historyList = document.getElementById('historyList');
+        const runningTotalEl = document.getElementById('runningTotal');
+        
+        if (!historyList || !runningTotalEl) return;
+        
+        // Update running total
+        if (this.runningTotal > 0) {
+            runningTotalEl.textContent = `+ $${this.runningTotal}`;
+        } else if (this.runningTotal < 0) {
+            runningTotalEl.textContent = `- $${Math.abs(this.runningTotal)}`;
+        } else {
+            runningTotalEl.textContent = `$${this.runningTotal}`;
+        }
+        runningTotalEl.style.color = this.runningTotal > 0 ? '#4caf50' : this.runningTotal < 0 ? '#f44336' : '#ffc107';
+        
+        // Clear and rebuild history list
+        if (this.gameHistory.length === 0) {
+            historyList.innerHTML = '<div class="history-empty">No games played yet</div>';
+            return;
+        }
+        
+        historyList.innerHTML = '';
+        this.gameHistory.forEach(game => {
+            const historyItem = document.createElement('div');
+            historyItem.className = `history-item ${game.result}`;
+            
+            const resultText = game.result === 'win' ? 'Win' : game.result === 'lose' ? 'Loss' : 'Push';
+            const amountClass = game.netAmount > 0 ? 'positive' : game.netAmount < 0 ? 'negative' : 'neutral';
+            
+            // Format amount with sign before dollar sign
+            let formattedAmount;
+            if (game.netAmount > 0) {
+                formattedAmount = `+ $${game.netAmount}`;
+            } else if (game.netAmount < 0) {
+                formattedAmount = `- $${Math.abs(game.netAmount)}`;
+            } else {
+                formattedAmount = `$${game.netAmount}`;
+            }
+            
+            historyItem.innerHTML = `
+                <div class="history-item-header">
+                    <span class="history-game-number">Game #${game.gameNumber}</span>
+                    <span class="history-result ${game.result}">${resultText}</span>
+                </div>
+                <div class="history-details">
+                    <span class="history-bet">Bet: $${game.bet}</span>
+                    <span class="history-amount ${amountClass}">${formattedAmount}</span>
+                </div>
+            `;
+            
+            historyList.appendChild(historyItem);
+        });
     }
     
     updateControls() {
@@ -347,10 +468,22 @@ class BlackjackGame {
         }, 3000);
     }
     
-    showModal(title, message) {
+    showModal(title, message, result = '') {
         const modal = document.getElementById('gameOverModal');
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalMessage').textContent = message;
+        const modalContent = modal.querySelector('.modal-content');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        
+        // Remove previous result classes
+        modalContent.classList.remove('modal-win', 'modal-lose', 'modal-push');
+        
+        // Add result class for styling
+        if (result) {
+            modalContent.classList.add(`modal-${result}`);
+        }
+        
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
         modal.classList.add('active');
     }
     
@@ -384,11 +517,13 @@ class BlackjackGame {
         document.getElementById('betMinus').addEventListener('click', () => {
             this.currentBet = Math.max(5, this.currentBet - 5);
             document.getElementById('betAmount').value = this.currentBet;
+            this.updateBetDisplay();
         });
         
         document.getElementById('betPlus').addEventListener('click', () => {
             this.currentBet = Math.min(500, Math.min(this.balance, this.currentBet + 5));
             document.getElementById('betAmount').value = this.currentBet;
+            this.updateBetDisplay();
         });
         
         document.getElementById('betAmount').addEventListener('input', (e) => {
@@ -396,6 +531,7 @@ class BlackjackGame {
             value = Math.max(5, Math.min(500, Math.min(this.balance, value)));
             this.currentBet = value;
             e.target.value = value;
+            this.updateBetDisplay();
         });
         
         // Quick bet buttons
@@ -404,6 +540,7 @@ class BlackjackGame {
                 const amount = parseInt(btn.dataset.amount);
                 this.currentBet = Math.min(amount, this.balance);
                 document.getElementById('betAmount').value = this.currentBet;
+                this.updateBetDisplay();
             });
         });
         

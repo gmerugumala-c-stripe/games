@@ -13,8 +13,14 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
+}
+
+.main-content {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
 }
 
 header {
@@ -61,12 +67,190 @@ header h1 {
 }
 
 .game-area {
+    flex: 1;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 20px;
     padding: 30px;
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.history-panel {
+    flex: 0 0 300px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    max-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+}
+
+.history-panel h3 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 10px;
+}
+
+.history-header {
+    margin-bottom: 15px;
+}
+
+.history-total {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-label {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.total-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.history-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.history-empty {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 20px;
+    font-style: italic;
+}
+
+.history-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.history-item.win {
+    border-left-color: #4caf50;
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.history-item.lose {
+    border-left-color: #f44336;
+    background: rgba(244, 67, 54, 0.1);
+}
+
+.history-item.push {
+    border-left-color: #ffc107;
+    background: rgba(255, 193, 7, 0.1);
+}
+
+.history-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em;
+}
+
+.history-game-number {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+}
+
+.history-result {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 1px;
+}
+
+.history-result.win {
+    color: #4caf50;
+}
+
+.history-result.lose {
+    color: #f44336;
+}
+
+.history-result.push {
+    color: #ffc107;
+}
+
+.history-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95em;
+    margin-top: 5px;
+}
+
+.history-bet {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.history-amount {
+    font-weight: bold;
+}
+
+.history-amount.positive {
+    color: #4caf50;
+}
+
+.history-amount.negative {
+    color: #f44336;
+}
+
+.history-amount.neutral {
+    color: #ffc107;
+}
+
+/* Scrollbar styling for history list */
+.history-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.history-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .dealer-section,
@@ -213,6 +397,47 @@ header h1 {
     padding: 20px;
     border-radius: 15px;
     margin-bottom: 25px;
+}
+
+.bet-info {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.bet-display,
+.win-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.bet-label,
+.win-label {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.bet-value {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.win-value {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #4caf50;
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
 }
 
 .bet-controls {
@@ -468,6 +693,25 @@ header h1 {
     color: rgba(255, 255, 255, 0.9);
 }
 
+/* Modal result-specific styling */
+.modal-content.modal-lose h2,
+.modal-content.modal-lose p {
+    color: #f44336;
+    text-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+}
+
+.modal-content.modal-win h2,
+.modal-content.modal-win p {
+    color: #4caf50;
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+.modal-content.modal-push h2,
+.modal-content.modal-push p {
+    color: #ffc107;
+    text-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     header h1 {
@@ -485,6 +729,16 @@ header h1 {
     }
 
     .card-suit {
+        font-size: 1.5em;
+    }
+
+    .bet-info {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .bet-value,
+    .win-value {
         font-size: 1.5em;
     }
 
