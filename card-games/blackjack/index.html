@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><span class="card-icon">🂡</span> Blackjack <span class="card-icon">🂮</span></h1>
+            <div class="balance-display">
+                <span class="balance-label">Balance:</span>
+                <span class="balance-amount" id="balance">$1000</span>
+            </div>
+        </header>
+
+        <div class="game-area">
+            <div class="dealer-section">
+                <div class="section-header">
+                    <h2>Dealer</h2>
+                    <div class="score" id="dealerScore"></div>
+                </div>
+                <div class="cards-container" id="dealerCards"></div>
+            </div>
+
+            <div class="game-status" id="gameStatus"></div>
+
+            <div class="player-section">
+                <div class="section-header">
+                    <h2>Player</h2>
+                    <div class="score" id="playerScore"></div>
+                </div>
+                <div class="cards-container" id="playerCards"></div>
+            </div>
+
+            <div class="betting-area">
+                <div class="bet-controls">
+                    <label>Bet Amount:</label>
+                    <div class="bet-input-group">
+                        <button class="bet-btn" id="betMinus">-</button>
+                        <input type="number" id="betAmount" value="10" min="5" max="500" step="5">
+                        <button class="bet-btn" id="betPlus">+</button>
+                    </div>
+                    <div class="quick-bets">
+                        <button class="quick-bet-btn" data-amount="10">$10</button>
+                        <button class="quick-bet-btn" data-amount="25">$25</button>
+                        <button class="quick-bet-btn" data-amount="50">$50</button>
+                        <button class="quick-bet-btn" data-amount="100">$100</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-primary" id="dealBtn">Deal Cards</button>
+                <button class="btn btn-action" id="hitBtn" disabled>Hit</button>
+                <button class="btn btn-action" id="standBtn" disabled>Stand</button>
+                <button class="btn btn-action" id="doubleBtn" disabled>Double Down</button>
+                <button class="btn btn-secondary" id="newGameBtn" disabled>New Game</button>
+            </div>
+        </div>
+
+        <div class="stats-panel">
+            <h3>Game Statistics</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-label">Games Played:</span>
+                    <span class="stat-value" id="gamesPlayed">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Wins:</span>
+                    <span class="stat-value" id="wins">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Losses:</span>
+                    <span class="stat-value" id="losses">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Win Rate:</span>
+                    <span class="stat-value" id="winRate">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="gameOverModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle"></h2>
+            <p id="modalMessage"></p>
+            <button class="btn btn-primary" id="modalOkBtn">OK</button>
+        </div>
+    </div>
+
+    <script src="blackjack.js"></script>
+</body>
+</html>
+
