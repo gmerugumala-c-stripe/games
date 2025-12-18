@@ -55,6 +55,7 @@
                             <button class="bet-btn" id="betPlus">+</button>
                         </div>
                         <div class="quick-bets">
+                            <button class="reset-bet-btn" id="resetBetBtn">Reset</button>
                             <button class="quick-bet-btn" data-amount="10">$10</button>
                             <button class="quick-bet-btn" data-amount="25">$25</button>
                             <button class="quick-bet-btn" data-amount="50">$50</button>
@@ -86,26 +87,29 @@
             </div>
         </div>
 
-        <div class="stats-panel">
-            <h3>Game Statistics</h3>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-label">Games Played:</span>
-                    <span class="stat-value" id="gamesPlayed">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Wins:</span>
-                    <span class="stat-value" id="wins">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Losses:</span>
-                    <span class="stat-value" id="losses">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Win Rate:</span>
-                    <span class="stat-value" id="winRate">0%</span>
+        <div class="stats-container">
+            <div class="stats-panel">
+                <h3>Game Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">Games Played:</span>
+                        <span class="stat-value" id="gamesPlayed">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Wins:</span>
+                        <span class="stat-value" id="wins">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Losses:</span>
+                        <span class="stat-value" id="losses">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Win Rate:</span>
+                        <span class="stat-value" id="winRate">0%</span>
+                    </div>
                 </div>
             </div>
+            <div class="stats-spacer"></div>
         </div>
     </div>
 

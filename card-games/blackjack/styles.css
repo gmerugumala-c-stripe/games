@@ -279,6 +279,7 @@ header h1 {
     border-radius: 20px;
     min-width: 60px;
     text-align: center;
+    display: none; /* Hidden by default, shown when game starts */
 }
 
 .cards-container {
@@ -370,7 +371,7 @@ header h1 {
     padding: 15px;
     margin: 20px 0;
     min-height: 50px;
-    display: flex;
+    display: none; /* Hidden by default, shown when game starts */
     align-items: center;
     justify-content: center;
     background: rgba(255, 255, 255, 0.1);
@@ -495,6 +496,7 @@ header h1 {
     gap: 10px;
     flex-wrap: wrap;
     justify-content: center;
+    margin-top: 6px; /* 40% increase from base 15px gap */
 }
 
 .quick-bet-btn {
@@ -513,6 +515,25 @@ header h1 {
     background: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.5);
     transform: translateY(-2px);
+}
+
+.reset-bet-btn {
+    padding: 8px 20px;
+    border: 2px solid rgba(255, 193, 7, 0.5);
+    border-radius: 20px;
+    background: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.reset-bet-btn:hover {
+    background: rgba(255, 193, 7, 0.25);
+    border-color: rgba(255, 193, 7, 0.7);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
 }
 
 .controls {
@@ -613,13 +634,24 @@ header h1 {
     transform: none !important;
 }
 
-.stats-panel {
+.stats-container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
     margin-top: 30px;
+}
+
+.stats-panel {
+    flex: 1;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 15px;
     padding: 25px;
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.stats-spacer {
+    flex: 0 0 300px; /* Matches history-panel width */
 }
 
 .stats-panel h3 {

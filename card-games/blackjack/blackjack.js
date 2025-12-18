@@ -3,6 +3,7 @@ class BlackjackGame {
         this.startingBalance = 1000;
         this.balance = 1000;
         this.currentBet = 10;
+        this.selectedDenomination = 10; // Track the selected bill denomination
         this.deck = [];
         this.dealerHand = [];
         this.playerHand = [];
@@ -26,6 +27,7 @@ class BlackjackGame {
         this.createDeck();
         this.shuffleDeck();
         this.updateDisplay();
+        this.updateGameStatus(''); // Hide game status initially
         this.attachEventListeners();
     }
     
@@ -335,13 +337,26 @@ class BlackjackGame {
             dealerCardsContainer.appendChild(this.renderCard(card, isHidden));
         });
         
-        // Update scores
-        const playerValue = this.calculateHandValue(this.playerHand);
-        document.getElementById('playerScore').textContent = this.playerHand.length > 0 ? playerValue : '';
+        // Update scores - only show when game has started
+        const playerScoreEl = document.getElementById('playerScore');
+        const dealerScoreEl = document.getElementById('dealerScore');
         
-        const dealerValue = this.calculateHandValue(this.dealerHand);
-        const dealerDisplayValue = (this.gameInProgress && this.dealerHand.length === 2) ? '?' : dealerValue;
-        document.getElementById('dealerScore').textContent = this.dealerHand.length > 0 ? dealerDisplayValue : '';
+        if (this.playerHand.length > 0) {
+            const playerValue = this.calculateHandValue(this.playerHand);
+            playerScoreEl.textContent = playerValue;
+            playerScoreEl.style.display = 'block';
+        } else {
+            playerScoreEl.style.display = 'none';
+        }
+        
+        if (this.dealerHand.length > 0) {
+            const dealerValue = this.calculateHandValue(this.dealerHand);
+            const dealerDisplayValue = (this.gameInProgress && this.dealerHand.length === 2) ? '?' : dealerValue;
+            dealerScoreEl.textContent = dealerDisplayValue;
+            dealerScoreEl.style.display = 'block';
+        } else {
+            dealerScoreEl.style.display = 'none';
+        }
         
         // Update stats
         document.getElementById('gamesPlayed').textContent = this.stats.gamesPlayed;
@@ -357,10 +372,16 @@ class BlackjackGame {
     }
     
     updateBetDisplay() {
-        // Update "You Bet" display
+        // Update "You Bet" display - shows actual bet amount
         const currentBetDisplay = document.getElementById('currentBetDisplay');
         if (currentBetDisplay) {
             currentBetDisplay.textContent = `$${this.currentBet}`;
+        }
+        
+        // Keep betAmount input showing the selected denomination (not the actual bet)
+        const betAmountInput = document.getElementById('betAmount');
+        if (betAmountInput && !betAmountInput.matches(':focus')) {
+            betAmountInput.value = this.selectedDenomination;
         }
         
         // Calculate and update "You Win" display
@@ -457,8 +478,13 @@ class BlackjackGame {
     
     updateGameStatus(message, type = '') {
         const statusEl = document.getElementById('gameStatus');
-        statusEl.textContent = message;
-        statusEl.className = 'game-status ' + type;
+        if (message && message.trim() !== '') {
+            statusEl.textContent = message;
+            statusEl.className = 'game-status ' + type;
+            statusEl.style.display = 'flex';
+        } else {
+            statusEl.style.display = 'none';
+        }
     }
     
     showMessage(message, type) {
@@ -515,21 +541,24 @@ class BlackjackGame {
         
         // Bet amount controls
         document.getElementById('betMinus').addEventListener('click', () => {
-            this.currentBet = Math.max(5, this.currentBet - 5);
-            document.getElementById('betAmount').value = this.currentBet;
+            this.currentBet = Math.max(5, this.currentBet - this.selectedDenomination);
+            // Keep betAmount input showing the selected denomination
+            document.getElementById('betAmount').value = this.selectedDenomination;
             this.updateBetDisplay();
         });
         
         document.getElementById('betPlus').addEventListener('click', () => {
-            this.currentBet = Math.min(500, Math.min(this.balance, this.currentBet + 5));
-            document.getElementById('betAmount').value = this.currentBet;
+            this.currentBet = Math.min(500, Math.min(this.balance, this.currentBet + this.selectedDenomination));
+            // Keep betAmount input showing the selected denomination
+            document.getElementById('betAmount').value = this.selectedDenomination;
             this.updateBetDisplay();
         });
         
         document.getElementById('betAmount').addEventListener('input', (e) => {
+            // When user manually changes betAmount, only update the denomination, not the current bet
             let value = parseInt(e.target.value) || 5;
-            value = Math.max(5, Math.min(500, Math.min(this.balance, value)));
-            this.currentBet = value;
+            value = Math.max(5, Math.min(500, value));
+            this.selectedDenomination = value;
             e.target.value = value;
             this.updateBetDisplay();
         });
@@ -538,10 +567,20 @@ class BlackjackGame {
         document.querySelectorAll('.quick-bet-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const amount = parseInt(btn.dataset.amount);
-                this.currentBet = Math.min(amount, this.balance);
-                document.getElementById('betAmount').value = this.currentBet;
+                this.selectedDenomination = amount;
+                // Only update the denomination, don't change the current bet
+                // Keep betAmount input showing the selected denomination
+                document.getElementById('betAmount').value = this.selectedDenomination;
                 this.updateBetDisplay();
             });
+        });
+        
+        // Reset bet button
+        document.getElementById('resetBetBtn').addEventListener('click', () => {
+            this.currentBet = 10;
+            this.selectedDenomination = 10;
+            document.getElementById('betAmount').value = 10;
+            this.updateBetDisplay();
         });
         
         // Modal close
